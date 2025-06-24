@@ -1,0 +1,11 @@
+# Ignore sensitive Google credential files
+credentials.json
+
+# Ignore the entire directory containing user tokens
+tokens/
+
+# Ignore log files
+scraper.log
+
+# Ignore Python cache files
+__pycache__/

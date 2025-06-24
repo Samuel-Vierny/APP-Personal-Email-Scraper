@@ -1,0 +1,14 @@
+{
+    "_NOTE": "The script now supports multiple accounts. Specify which email to use in 'target_email'.",
+    
+    "send_notification_email": true,
+
+    "potential_target_emails": "",
+    "target_email": "samuel.v@students.opit.com", 
+  
+    "_comment_for_search_query": "Enter any search query you would use in the Gmail search bar. Examples --> from:john.doe@email.com  ...  subject:\"Project Updates\"  ...  is:unread has:attachment",
+    "search_query": "sandro.crocelli@sintica.it",
+  
+    "_comment_for_output_filename": "The name of the text file that the scraped emails will be saved into on your Desktop.",
+    "output_filename": "scraped_emails.txt"
+  }
