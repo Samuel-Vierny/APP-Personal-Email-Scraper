@@ -8,6 +8,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from google.auth.exceptions import RefreshError
 
 # --- Configuration ---
 # SCOPE has been returned to read-only, as sending mail is no longer needed.
@@ -71,11 +72,19 @@ def main():
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 logging.info("Credentials expired. Refreshing token...")
-                creds.refresh(Request())
-            else:
+                try:
+                    creds.refresh(Request())
+                except RefreshError as e:
+                    logging.warning(f"Refresh token is invalid or revoked. Deleting it and re-authenticating. Error: {e}")
+                    os.remove(token_file)
+                    creds = None # Force re-authentication by setting creds to None
+            
+            # This block will now run if there's no token OR if the refresh failed.
+            if not creds: 
                 logging.info(f"No valid token found for {target_email}. Starting new authorization flow.")
                 flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
                 creds = flow.run_local_server(port=0)
+            
             with open(token_file, "w") as token:
                 token.write(creds.to_json())
             logging.info(f"Authorization successful. Token saved to {token_file}")
